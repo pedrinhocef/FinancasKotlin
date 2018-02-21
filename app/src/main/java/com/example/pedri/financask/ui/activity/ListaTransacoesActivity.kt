@@ -6,6 +6,7 @@ import com.example.pedri.financask.R
 import com.example.pedri.financask.extension.formataParaBrasileiro
 import com.example.pedri.financask.model.Tipo
 import com.example.pedri.financask.model.Transacao
+import com.example.pedri.financask.ui.ResumoView
 import com.example.pedri.financask.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 import kotlinx.android.synthetic.main.resumo_card.*
@@ -21,21 +22,11 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
         val transacoes = transacoesDeExemplo()
 
-        adicionaReceitaNoResumo(transacoes)
+        val view = window.decorView
+        ResumoView(view).adicionaReceitaNoResumo(transacoes)
 
         configuraTransacao(transacoes)
 
-    }
-
-    private fun adicionaReceitaNoResumo(transacoes: List<Transacao>) {
-        var totalReceita = BigDecimal.ZERO
-        for (transacao in transacoes) {
-            if (transacao.tipo == Tipo.RECEITA) {
-                totalReceita = totalReceita.plus(transacao.valor)
-            }
-
-            resumo_card_receita.text = totalReceita.formataParaBrasileiro()
-        }
     }
 
     private fun configuraTransacao(transacoes: List<Transacao>) {
