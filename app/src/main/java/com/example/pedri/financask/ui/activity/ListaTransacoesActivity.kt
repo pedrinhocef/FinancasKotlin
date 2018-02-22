@@ -2,14 +2,13 @@ package com.example.pedri.financask.ui.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.example.pedri.financask.R
-import com.example.pedri.financask.extension.formataParaBrasileiro
 import com.example.pedri.financask.model.Tipo
 import com.example.pedri.financask.model.Transacao
 import com.example.pedri.financask.ui.ResumoView
 import com.example.pedri.financask.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
-import kotlinx.android.synthetic.main.resumo_card.*
 import java.math.BigDecimal
 
 
@@ -20,13 +19,19 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_lista_transacoes)
 
-        val transacoes = transacoesDeExemplo()
+        val transacoes: List<Transacao> = transacoesDeExemplo()
 
-        val view = window.decorView
-        ResumoView(view).adicionaReceitaNoResumo(transacoes)
+        configuraResumo(transacoes)
 
         configuraTransacao(transacoes)
 
+    }
+
+    private fun configuraResumo(transacoes: List<Transacao>) {
+        val view: View = window.decorView
+        val resumoView = ResumoView(view,transacoes)
+        resumoView.adicionaReceita()
+        resumoView.adicionaDespesa()
     }
 
     private fun configuraTransacao(transacoes: List<Transacao>) {
@@ -37,8 +42,8 @@ class ListaTransacoesActivity : AppCompatActivity() {
         return listOf(Transacao(valor = BigDecimal(20.5),
                 tipo = Tipo.RECEITA),
                 Transacao(valor = BigDecimal(900),
-                        categoria = "Salario de qualque mes mesmo",
-                        tipo = Tipo.RECEITA))
+                        categoria = "Compras",
+                        tipo = Tipo.DESPESA))
     }
 
 }

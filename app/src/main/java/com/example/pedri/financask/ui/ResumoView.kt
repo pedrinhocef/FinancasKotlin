@@ -7,9 +7,10 @@ import com.example.pedri.financask.model.Transacao
 import kotlinx.android.synthetic.main.resumo_card.view.*
 import java.math.BigDecimal
 
-class ResumoView(private val view: View) {
+class ResumoView(private val view: View,
+                 private val transacoes: List<Transacao>) {
 
-    fun adicionaReceitaNoResumo(transacoes: List<Transacao>) {
+    fun adicionaReceita() {
         var totalReceita = BigDecimal.ZERO
         for (transacao in transacoes){
             if (transacao.tipo == Tipo.RECEITA) {
@@ -17,5 +18,15 @@ class ResumoView(private val view: View) {
             }
         }
         view.resumo_card_receita.text = totalReceita.formataParaBrasileiro()
+    }
+
+    fun adicionaDespesa() {
+        var totalDespesa = BigDecimal.ZERO
+        for (transacao in transacoes){
+            if (transacao.tipo == Tipo.DESPESA) {
+                totalDespesa = totalDespesa.plus(transacao.valor)
+            }
+        }
+        view.resumo_card_despesa.text = totalDespesa.formataParaBrasileiro()
     }
 }
