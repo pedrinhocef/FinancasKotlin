@@ -8,3 +8,5 @@ APP desenvolvido utilizando a linguagem Kotlin.
 - Dialogs, DatePickers e Spinners
 # link do curso  
 https://cursos.alura.com.br/career/desenvolvimento-mobile-kotlin
+# Certificados Alura
+https://cursos.alura.com.br/user/pedrinhocef/fullCertificate/fc095b4f8d0d50d30b1afedbf74fcff1
