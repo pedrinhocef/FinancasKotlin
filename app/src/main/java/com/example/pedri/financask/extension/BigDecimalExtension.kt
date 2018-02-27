@@ -10,4 +10,5 @@ import java.util.Locale
     return formatoBrasileiro
             .format(this)
             .replace("R$", "R$ ")
+            .replace("-R$ ", "R$ -")
 }
