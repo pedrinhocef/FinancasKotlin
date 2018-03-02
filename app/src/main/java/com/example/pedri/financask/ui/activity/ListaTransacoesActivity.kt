@@ -1,8 +1,12 @@
 package com.example.pedri.financask.ui.activity
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import com.example.pedri.financask.R
 import com.example.pedri.financask.model.Tipo
 import com.example.pedri.financask.model.Transacao
@@ -24,6 +28,24 @@ class ListaTransacoesActivity : AppCompatActivity() {
         configuraResumo(transacoes)
 
         configuraTransacao(transacoes)
+        
+        lista_transacoes_adiciona_despesa
+                .setOnClickListener {
+                    val view: View = window.decorView
+                    val viewCriada = LayoutInflater.from(this)
+                            .inflate(R.layout.form_transacao, view as ViewGroup, false)
+
+                    AlertDialog.Builder(this)
+                            .setTitle(R.string.adiciona_despesa)
+                            .setView(viewCriada)
+                            .show()
+                }
+
+        lista_transacoes_adiciona_receita
+                .setOnClickListener {
+                    Toast.makeText(this@ListaTransacoesActivity,"Clique receita", Toast
+                            .LENGTH_LONG).show()
+                }
 
     }
 
