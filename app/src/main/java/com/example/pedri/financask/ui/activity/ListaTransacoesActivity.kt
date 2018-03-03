@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
 import com.example.pedri.financask.R
@@ -55,16 +56,26 @@ class ListaTransacoesActivity : AppCompatActivity() {
                                 { view, ano, mes, dia ->
 
                                     val dataSelecionada = Calendar.getInstance()
-                                    dataSelecionada.set(ano, mes , dia )
+                                    dataSelecionada.set(ano, mes, dia)
                                     viewCriada.form_transacao_data
                                             .setText(dataSelecionada.formataParaBrasileiro())
                                 }
                                         , ano, mes, dia).show()
+
                             }
+
+                    val adapter = ArrayAdapter
+                            .createFromResource(this,R.array.categorias_de_despesa,
+                                    android.R.layout.simple_spinner_dropdown_item)
+                    viewCriada.form_transacao_categoria.adapter = adapter
+
+
 
                     AlertDialog.Builder(this)
                             .setTitle(R.string.adiciona_despesa)
                             .setView(viewCriada)
+                            .setPositiveButton("Adicionar", null)
+                            .setNegativeButton("Cancelar", null)
                             .show()
                 }
 
