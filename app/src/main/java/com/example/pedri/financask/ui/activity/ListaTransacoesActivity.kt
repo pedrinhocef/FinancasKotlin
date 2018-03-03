@@ -1,19 +1,24 @@
 package com.example.pedri.financask.ui.activity
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import android.widget.Toast
 import com.example.pedri.financask.R
+import com.example.pedri.financask.extension.formataParaBrasileiro
 import com.example.pedri.financask.model.Tipo
 import com.example.pedri.financask.model.Transacao
 import com.example.pedri.financask.ui.ResumoView
 import com.example.pedri.financask.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
+import kotlinx.android.synthetic.main.form_transacao.view.*
 import java.math.BigDecimal
+import java.util.*
 
 
 class ListaTransacoesActivity : AppCompatActivity() {
@@ -28,12 +33,34 @@ class ListaTransacoesActivity : AppCompatActivity() {
         configuraResumo(transacoes)
 
         configuraTransacao(transacoes)
-        
+
         lista_transacoes_adiciona_despesa
                 .setOnClickListener {
                     val view: View = window.decorView
                     val viewCriada = LayoutInflater.from(this)
                             .inflate(R.layout.form_transacao, view as ViewGroup, false)
+
+                    val ano = 2018
+                    val mes = 2
+                    val dia = 2
+
+                    val hoje = Calendar.getInstance()
+
+                    viewCriada.form_transacao_data
+                            .setText(hoje.formataParaBrasileiro())
+
+                    viewCriada.form_transacao_data
+                            .setOnClickListener {
+                                DatePickerDialog(this, DatePickerDialog.OnDateSetListener
+                                { view, ano, mes, dia ->
+
+                                    val dataSelecionada = Calendar.getInstance()
+                                    dataSelecionada.set(ano, mes , dia )
+                                    viewCriada.form_transacao_data
+                                            .setText(dataSelecionada.formataParaBrasileiro())
+                                }
+                                        , ano, mes, dia).show()
+                            }
 
                     AlertDialog.Builder(this)
                             .setTitle(R.string.adiciona_despesa)
@@ -43,7 +70,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
         lista_transacoes_adiciona_receita
                 .setOnClickListener {
-                    Toast.makeText(this@ListaTransacoesActivity,"Clique receita", Toast
+                    Toast.makeText(this@ListaTransacoesActivity, "Clique receita", Toast
                             .LENGTH_LONG).show()
                 }
 
@@ -51,7 +78,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private fun configuraResumo(transacoes: List<Transacao>) {
         val view: View = window.decorView
-        val resumoView = ResumoView(this, view,transacoes)
+        val resumoView = ResumoView(this, view, transacoes)
         resumoView.atualiza()
     }
 
