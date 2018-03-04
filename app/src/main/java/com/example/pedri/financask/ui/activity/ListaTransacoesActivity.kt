@@ -1,6 +1,7 @@
 package com.example.pedri.financask.ui.activity
 
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.example.pedri.financask.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 import kotlinx.android.synthetic.main.form_transacao.view.*
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -74,7 +76,25 @@ class ListaTransacoesActivity : AppCompatActivity() {
                     AlertDialog.Builder(this)
                             .setTitle(R.string.adiciona_despesa)
                             .setView(viewCriada)
-                            .setPositiveButton("Adicionar", null)
+                            .setPositiveButton("Adicionar", { dialog, which ->
+                                val valorEmTexto = viewCriada.form_transacao_valor.text.toString()
+                                val dataEmTexto = viewCriada.form_transacao_data.text.toString()
+                                val categoriaEmTexto = viewCriada.form_transacao_categoria.selectedItem.toString()
+
+                                val valor = BigDecimal(valorEmTexto)
+                                val formatoBrasileiro = SimpleDateFormat("dd/MM/yyyy")
+                                val dataConvertida = formatoBrasileiro.parse(dataEmTexto)
+                                val data = Calendar.getInstance()
+                                data.time = dataConvertida
+
+                                val transacaoCriada = Transacao(tipo = Tipo.DESPESA, valor = valor,
+                                        data = data, categoria = categoriaEmTexto)
+
+                                Toast.makeText(this, "${transacaoCriada.valor} - " +
+                                        "${transacaoCriada.categoria} - " +
+                                        "${transacaoCriada.data.formataParaBrasileiro()} - " +
+                                        "${transacaoCriada.tipo}",Toast.LENGTH_LONG).show()
+                            })
                             .setNegativeButton("Cancelar", null)
                             .show()
                 }
