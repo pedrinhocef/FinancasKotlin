@@ -25,7 +25,7 @@ import java.util.*
 class ListaTransacoesActivity : AppCompatActivity() {
 
 
-    private val transacoes : MutableList<Transacao> = mutableListOf()
+    private val transacoes: MutableList<Transacao> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +66,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
                             }
 
                     val adapter = ArrayAdapter
-                            .createFromResource(this,R.array.categorias_de_despesa,
+                            .createFromResource(this, R.array.categorias_de_despesa,
                                     android.R.layout.simple_spinner_dropdown_item)
                     viewCriada.form_transacao_categoria.adapter = adapter
 
@@ -80,7 +80,15 @@ class ListaTransacoesActivity : AppCompatActivity() {
                                 val dataEmTexto = viewCriada.form_transacao_data.text.toString()
                                 val categoriaEmTexto = viewCriada.form_transacao_categoria.selectedItem.toString()
 
-                                val valor = BigDecimal(valorEmTexto)
+
+                                var valor = try {
+                                    BigDecimal(valorEmTexto)
+
+                                } catch (excepetion: NumberFormatException) {
+                                    Toast.makeText(this, "Falha ao fazer a conversão",
+                                            Toast.LENGTH_LONG).show()
+                                    BigDecimal.ZERO
+                                }
                                 val formatoBrasileiro = SimpleDateFormat("dd/MM/yyyy")
                                 val dataConvertida = formatoBrasileiro.parse(dataEmTexto)
                                 val data = Calendar.getInstance()
