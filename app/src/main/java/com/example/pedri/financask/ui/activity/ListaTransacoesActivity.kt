@@ -1,7 +1,6 @@
 package com.example.pedri.financask.ui.activity
 
 import android.app.DatePickerDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.DatePicker
 import android.widget.Toast
 import com.example.pedri.financask.R
 import com.example.pedri.financask.extension.formataParaBrasileiro
@@ -26,16 +24,17 @@ import java.util.*
 
 class ListaTransacoesActivity : AppCompatActivity() {
 
+
+    private val transacoes : MutableList<Transacao> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_lista_transacoes)
 
-        val transacoes: List<Transacao> = transacoesDeExemplo()
+        configuraResumo()
 
-        configuraResumo(transacoes)
-
-        configuraTransacao(transacoes)
+        configuraTransacao()
 
         lista_transacoes_adiciona_despesa
                 .setOnClickListener {
@@ -90,10 +89,9 @@ class ListaTransacoesActivity : AppCompatActivity() {
                                 val transacaoCriada = Transacao(tipo = Tipo.DESPESA, valor = valor,
                                         data = data, categoria = categoriaEmTexto)
 
-                                Toast.makeText(this, "${transacaoCriada.valor} - " +
-                                        "${transacaoCriada.categoria} - " +
-                                        "${transacaoCriada.data.formataParaBrasileiro()} - " +
-                                        "${transacaoCriada.tipo}",Toast.LENGTH_LONG).show()
+                                atualizaTransacoes(transacaoCriada)
+                                lista_transacoes_adiciona_menu.close(true)
+
                             })
                             .setNegativeButton("Cancelar", null)
                             .show()
@@ -107,22 +105,20 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     }
 
-    private fun configuraResumo(transacoes: List<Transacao>) {
+    private fun atualizaTransacoes(transacao: Transacao) {
+        transacoes.add(transacao)
+        configuraResumo()
+        configuraTransacao()
+    }
+
+    private fun configuraResumo() {
         val view: View = window.decorView
         val resumoView = ResumoView(this, view, transacoes)
         resumoView.atualiza()
     }
 
-    private fun configuraTransacao(transacoes: List<Transacao>) {
+    private fun configuraTransacao() {
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(transacoes, this)
-    }
-
-    private fun transacoesDeExemplo(): List<Transacao> {
-        return listOf(Transacao(valor = BigDecimal(300),
-                tipo = Tipo.RECEITA),
-                Transacao(valor = BigDecimal(100),
-                        categoria = "Compras",
-                        tipo = Tipo.DESPESA))
     }
 
 }
