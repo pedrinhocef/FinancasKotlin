@@ -6,6 +6,7 @@ APP desenvolvido utilizando a linguagem Kotlin.
 - Expressões lambda
 - Single-Expression Function
 - Dialogs, DatePickers e Spinners
+- Delegate
 # link do curso  
 https://cursos.alura.com.br/career/desenvolvimento-mobile-kotlin
 # Certificados Alura
