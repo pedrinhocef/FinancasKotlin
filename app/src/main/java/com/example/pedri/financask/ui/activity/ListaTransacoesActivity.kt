@@ -1,25 +1,17 @@
 package com.example.pedri.financask.ui.activity
 
-import android.app.DatePickerDialog
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.pedri.financask.R
-import com.example.pedri.financask.extension.formataParaBrasileiro
-import com.example.pedri.financask.model.Tipo
+import com.example.pedri.financask.delegate.TransacaoDelegate
 import com.example.pedri.financask.model.Transacao
 import com.example.pedri.financask.ui.ResumoView
 import com.example.pedri.financask.ui.adapter.ListaTransacoesAdapter
+import com.example.pedri.financask.ui.dialog.AdicionaTransacaoDialog
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
-import kotlinx.android.synthetic.main.form_transacao.view.*
-import java.math.BigDecimal
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class ListaTransacoesActivity : AppCompatActivity() {
@@ -38,7 +30,14 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
         lista_transacoes_adiciona_despesa
                 .setOnClickListener {
-                    configuraDialog()
+                    AdicionaTransacaoDialog(window.decorView as ViewGroup, this)
+                            .configuraDialog(object : TransacaoDelegate{
+                                override fun delegate(transacao: Transacao) {
+                                    atualizaTransacoes(transacao)
+                                    lista_transacoes_adiciona_menu.close(true)
+                                }
+                            })
+
                 }
 
         lista_transacoes_adiciona_receita

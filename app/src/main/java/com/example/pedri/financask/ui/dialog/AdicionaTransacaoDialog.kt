@@ -9,26 +9,26 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.pedri.financask.R
+import com.example.pedri.financask.delegate.TransacaoDelegate
+import com.example.pedri.financask.extension.converteParaCalendar
 import com.example.pedri.financask.extension.formataParaBrasileiro
 import com.example.pedri.financask.model.Tipo
 import com.example.pedri.financask.model.Transacao
-import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 import kotlinx.android.synthetic.main.form_transacao.view.*
 import java.math.BigDecimal
-import java.text.SimpleDateFormat
 import java.util.*
 
 class AdicionaTransacaoDialog(private val viewGroup: ViewGroup,
                               private val context: Context) {
     private val viewCriada = criaLayout()
 
-    private fun configuraDialog() {
+    fun configuraDialog(transacaoDelegate: TransacaoDelegate) {
         configuraCampoData()
         configuraCampoCategoria()
-        configuraFormulario()
+        configuraFormulario(transacaoDelegate)
     }
 
-    private fun configuraFormulario() {
+    private fun configuraFormulario(transacaoDelegate: TransacaoDelegate) {
         AlertDialog.Builder(context)
                 .setTitle(R.string.adiciona_despesa)
                 .setView(viewCriada)
@@ -43,8 +43,7 @@ class AdicionaTransacaoDialog(private val viewGroup: ViewGroup,
                     val transacaoCriada = Transacao(tipo = Tipo.DESPESA, valor = valor,
                             data = data, categoria = categoriaEmTexto)
 
-                    atualizaTransacoes(transacaoCriada)
-                    lista_transacoes_adiciona_menu.close(true)
+                    transacaoDelegate.delegate(transacaoCriada)
 
                 })
                 .setNegativeButton("Cancelar", null)
