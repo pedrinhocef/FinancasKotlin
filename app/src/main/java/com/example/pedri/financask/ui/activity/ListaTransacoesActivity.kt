@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.pedri.financask.R
 import com.example.pedri.financask.delegate.TransacaoDelegate
 import com.example.pedri.financask.model.Tipo
@@ -22,37 +21,34 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_lista_transacoes)
 
         configuraResumo()
-
         configuraTransacao()
+        configuraFab()
 
+    }
+
+    private fun configuraFab() {
         lista_transacoes_adiciona_despesa
                 .setOnClickListener {
-                    AdicionaTransacaoDialog(window.decorView as ViewGroup, this)
-                            .configuraDialog(Tipo.DESPESA, object : TransacaoDelegate {
-                                override fun delegate(transacao: Transacao) {
-                                    atualizaTransacoes(transacao)
-                                    lista_transacoes_adiciona_menu.close(true)
-                                }
-                            })
-
+                    chamaDialogDeAdicao(Tipo.DESPESA)
                 }
 
         lista_transacoes_adiciona_receita
                 .setOnClickListener {
-                    AdicionaTransacaoDialog(window.decorView as ViewGroup, this)
-                            .configuraDialog(Tipo.RECEITA, object : TransacaoDelegate {
-                                override fun delegate(transacao: Transacao) {
-                                    atualizaTransacoes(transacao)
-                                    lista_transacoes_adiciona_menu.close(true)
-                                }
-                            })
+                    chamaDialogDeAdicao(Tipo.RECEITA)
                 }
+    }
 
-
+    private fun chamaDialogDeAdicao(tipo: Tipo) {
+        AdicionaTransacaoDialog(window.decorView as ViewGroup, this)
+                .chama(tipo, object : TransacaoDelegate {
+                    override fun delegate(transacao: Transacao) {
+                        atualizaTransacoes(transacao)
+                        lista_transacoes_adiciona_menu.close(true)
+                    }
+                })
     }
 
     private fun atualizaTransacoes(transacao: Transacao) {
