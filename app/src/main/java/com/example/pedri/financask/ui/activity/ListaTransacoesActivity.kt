@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.pedri.financask.R
 import com.example.pedri.financask.delegate.TransacaoDelegate
+import com.example.pedri.financask.model.Tipo
 import com.example.pedri.financask.model.Transacao
 import com.example.pedri.financask.ui.ResumoView
 import com.example.pedri.financask.ui.adapter.ListaTransacoesAdapter
@@ -31,7 +32,7 @@ class ListaTransacoesActivity : AppCompatActivity() {
         lista_transacoes_adiciona_despesa
                 .setOnClickListener {
                     AdicionaTransacaoDialog(window.decorView as ViewGroup, this)
-                            .configuraDialog(object : TransacaoDelegate{
+                            .configuraDialog(Tipo.DESPESA, object : TransacaoDelegate {
                                 override fun delegate(transacao: Transacao) {
                                     atualizaTransacoes(transacao)
                                     lista_transacoes_adiciona_menu.close(true)
@@ -42,9 +43,15 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
         lista_transacoes_adiciona_receita
                 .setOnClickListener {
-                    Toast.makeText(this@ListaTransacoesActivity, "Clique receita", Toast
-                            .LENGTH_LONG).show()
+                    AdicionaTransacaoDialog(window.decorView as ViewGroup, this)
+                            .configuraDialog(Tipo.RECEITA, object : TransacaoDelegate {
+                                override fun delegate(transacao: Transacao) {
+                                    atualizaTransacoes(transacao)
+                                    lista_transacoes_adiciona_menu.close(true)
+                                }
+                            })
                 }
+
 
     }
 
