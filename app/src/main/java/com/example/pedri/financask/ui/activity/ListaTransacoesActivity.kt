@@ -11,6 +11,7 @@ import com.example.pedri.financask.model.Transacao
 import com.example.pedri.financask.ui.ResumoView
 import com.example.pedri.financask.ui.adapter.ListaTransacoesAdapter
 import com.example.pedri.financask.ui.dialog.AdicionaTransacaoDialog
+import com.example.pedri.financask.ui.dialog.AlteraTransacaoDialog
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 
 
@@ -65,6 +66,17 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private fun configuraTransacao() {
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(transacoes, this)
+        lista_transacoes_listview.setOnItemClickListener { parent, view, position, id ->
+            val transacao = transacoes[position]
+
+            AlteraTransacaoDialog(window.decorView as ViewGroup, this)
+                    .chama(transacao, object : TransacaoDelegate {
+                        override fun delegate(transacao: Transacao) {
+                            atualizaTransacoes(transacao)
+                        }
+
+            })
+        }
     }
 
 }
