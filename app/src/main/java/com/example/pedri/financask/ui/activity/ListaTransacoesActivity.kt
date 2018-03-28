@@ -2,7 +2,6 @@ package com.example.pedri.financask.ui.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.view.ViewGroup
 import com.example.pedri.financask.R
 import com.example.pedri.financask.delegate.TransacaoDelegate
