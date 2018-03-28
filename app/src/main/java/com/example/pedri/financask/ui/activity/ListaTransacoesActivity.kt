@@ -19,13 +19,19 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
 
     private val transacoes: MutableList<Transacao> = mutableListOf()
+    private val viewDaActivity by lazy {
+        window.decorView
+    }
+    private val viewGroupDaActivity by lazy {
+        viewDaActivity as ViewGroup
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_transacoes)
 
         configuraResumo()
-        configuraTransacao()
+        configuraLista()
         configuraFab()
 
     }
@@ -43,41 +49,54 @@ class ListaTransacoesActivity : AppCompatActivity() {
     }
 
     private fun chamaDialogDeAdicao(tipo: Tipo) {
-        AdicionaTransacaoDialog(window.decorView as ViewGroup, this)
+        AdicionaTransacaoDialog(viewGroupDaActivity, this)
                 .chama(tipo, object : TransacaoDelegate {
                     override fun delegate(transacao: Transacao) {
-                        transacoes.add(transacao)
-                        atualizaTransacoes()
+                        adiciona(transacao)
                         lista_transacoes_adiciona_menu.close(true)
                     }
                 })
     }
 
+    private fun adiciona(transacao: Transacao) {
+        transacoes.add(transacao)
+        atualizaTransacoes()
+    }
+
     private fun atualizaTransacoes() {
         configuraResumo()
-        configuraTransacao()
+        configuraLista()
     }
 
     private fun configuraResumo() {
-        val view: View = window.decorView
-        val resumoView = ResumoView(this, view, transacoes)
+        val resumoView = ResumoView(this, viewDaActivity, transacoes)
         resumoView.atualiza()
     }
 
-    private fun configuraTransacao() {
-        lista_transacoes_listview.adapter = ListaTransacoesAdapter(transacoes, this)
-        lista_transacoes_listview.setOnItemClickListener { parent, view, position, id ->
-            val transacao = transacoes[position]
+    private fun configuraLista() {
+        val listaTransacoesAdapter = ListaTransacoesAdapter(transacoes, this)
+        with(lista_transacoes_listview){
+            adapter = listaTransacoesAdapter
+            lista_transacoes_listview.setOnItemClickListener { _, _, position, _ ->
+                val transacao = transacoes[position]
+                chamaDialogDeAlteracao(transacao, position)
+            }
 
-            AlteraTransacaoDialog(window.decorView as ViewGroup, this)
-                    .chama(transacao, object : TransacaoDelegate {
-                        override fun delegate(transacao: Transacao) {
-                            transacoes[position] = transacao
-                            atualizaTransacoes()
-                        }
-
-            })
         }
+    }
+
+    private fun chamaDialogDeAlteracao(transacao: Transacao, position: Int) {
+        AlteraTransacaoDialog(viewGroupDaActivity, this)
+                .chama(transacao, object : TransacaoDelegate {
+                    override fun delegate(transacao: Transacao) {
+                        altera(transacao, position)
+                    }
+                })
+    }
+
+    private fun altera(transacao: Transacao, position: Int) {
+        transacoes[position] = transacao
+        atualizaTransacoes()
     }
 
 }
