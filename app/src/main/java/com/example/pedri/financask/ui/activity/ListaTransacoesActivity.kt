@@ -2,9 +2,11 @@ package com.example.pedri.financask.ui.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.AdapterView
 import com.example.pedri.financask.R
-import com.example.pedri.financask.delegate.TransacaoDelegate
 import com.example.pedri.financask.model.Tipo
 import com.example.pedri.financask.model.Transacao
 import com.example.pedri.financask.ui.ResumoView
@@ -49,12 +51,10 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private fun chamaDialogDeAdicao(tipo: Tipo) {
         AdicionaTransacaoDialog(viewGroupDaActivity, this)
-                .chama(tipo, object : TransacaoDelegate {
-                    override fun delegate(transacao: Transacao) {
-                        adiciona(transacao)
-                        lista_transacoes_adiciona_menu.close(true)
-                    }
-                })
+                .chama(tipo) { transacaoCriada ->
+                    adiciona(transacaoCriada)
+                    lista_transacoes_adiciona_menu.close(true)
+                }
     }
 
     private fun adiciona(transacao: Transacao) {
@@ -74,23 +74,39 @@ class ListaTransacoesActivity : AppCompatActivity() {
 
     private fun configuraLista() {
         val listaTransacoesAdapter = ListaTransacoesAdapter(transacoes, this)
-        with(lista_transacoes_listview){
+        with(lista_transacoes_listview) {
             adapter = listaTransacoesAdapter
             lista_transacoes_listview.setOnItemClickListener { _, _, position, _ ->
                 val transacao = transacoes[position]
                 chamaDialogDeAlteracao(transacao, position)
             }
-
+            setOnCreateContextMenuListener { menu, _, _ ->
+                menu.add(Menu.NONE, 1, Menu.NONE, "Remover")
+            }
         }
+    }
+
+    override fun onContextItemSelected(item: MenuItem?): Boolean {
+        val idDoMenu = item?.itemId
+        if(idDoMenu == 1) {
+            val adapterMenuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
+            val posicaoDaTransacao = adapterMenuInfo.position
+            remove(posicaoDaTransacao)
+        }
+        return super.onContextItemSelected(item)
+    }
+
+    private fun remove(transacao: Int) {
+        transacoes.removeAt(transacao)
+        atualizaTransacoes()
     }
 
     private fun chamaDialogDeAlteracao(transacao: Transacao, position: Int) {
         AlteraTransacaoDialog(viewGroupDaActivity, this)
-                .chama(transacao, object : TransacaoDelegate {
-                    override fun delegate(transacao: Transacao) {
-                        altera(transacao, position)
-                    }
-                })
+                .chama(transacao) { transacaoAlterada ->
+                    altera(transacaoAlterada, position)
+                }
+
     }
 
     private fun altera(transacao: Transacao, position: Int) {

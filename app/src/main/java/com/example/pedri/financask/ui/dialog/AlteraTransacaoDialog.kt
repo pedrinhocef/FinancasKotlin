@@ -3,7 +3,6 @@ package com.example.pedri.financask.ui.dialog
 import android.content.Context
 import android.view.ViewGroup
 import com.example.pedri.financask.R
-import com.example.pedri.financask.delegate.TransacaoDelegate
 import com.example.pedri.financask.extension.formataParaBrasileiro
 import com.example.pedri.financask.model.Tipo
 import com.example.pedri.financask.model.Transacao
@@ -23,10 +22,10 @@ class AlteraTransacaoDialog(
     }
 
 
-    fun chama(transacao: Transacao, transacaoDelegate: TransacaoDelegate) {
+    fun chama(transacao: Transacao, delegate:(transacao: Transacao) -> Unit) {
         val tipo = transacao.tipo
 
-       super.chama(tipo,transacaoDelegate)
+       super.chama(tipo,delegate)
         inicializaCampos(transacao)
     }
 
