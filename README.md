@@ -9,5 +9,5 @@ APP desenvolvido utilizando a linguagem Kotlin.
 - Delegate
 # link do curso  
 https://cursos.alura.com.br/career/desenvolvimento-mobile-kotlin
-# Certificados Alura
-https://cursos.alura.com.br/user/pedrinhocef/fullCertificate/fc095b4f8d0d50d30b1afedbf74fcff1
+# Certificado do curso
+https://cursos.alura.com.br/career/certificate/13ea79a6-e10e-404b-85d8-533750189161
